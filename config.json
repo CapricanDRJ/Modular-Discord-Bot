@@ -1,4 +1,4 @@
 {
-        "Token": "token here",
-        "ClientID": "client id here"
+    "Token": "YOUR_BOT_TOKEN",
+    "ClientID": "YOUR_CLIENT_ID"
 }
