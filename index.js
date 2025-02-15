@@ -60,12 +60,12 @@ client.once('ready', async () => {
     });
 });
 
-client.on("interactionCreate", async (interaction) => {
-    for (const mod of modules) {
-        if (mod.handleInteraction) {
-            await mod.handleInteraction(client, interaction);
-        }
-    }
+client.on("interactionCreate", (interaction) => {
+    Promise.all(
+        modules
+            .filter(mod => mod.handleInteraction)
+            .map(mod => mod.handleInteraction(client, interaction))
+    ).catch(console.error); // Log errors if any module fails
 });
 
 client.login(Config.Token).catch(console.error);
