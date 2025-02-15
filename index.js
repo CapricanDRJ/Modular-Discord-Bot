@@ -8,7 +8,7 @@ const client = new Discord.Client({
     partials: [Discord.Partials.User, Discord.Partials.Channel, Discord.Partials.GuildMember, Discord.Partials.Message]
 });
 
-// Load all modules from the /modules directory at startup
+// Dynamically load all modules from the /modules directory
 const modulesDir = path.join(__dirname, 'modules');
 const modules = fs.readdirSync(modulesDir)
     .filter(file => file.endsWith('.js'))
@@ -61,12 +61,11 @@ client.once('ready', async () => {
 });
 
 client.on("interactionCreate", async (interaction) => {
-    // Execute all handleInteraction functions in parallel
-    await Promise.all(modules.map(async (mod) => {
+    for (const mod of modules) {
         if (mod.handleInteraction) {
             await mod.handleInteraction(client, interaction);
         }
-    }));
+    }
 });
 
 client.login(Config.Token).catch(console.error);
